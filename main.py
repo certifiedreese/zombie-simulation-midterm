@@ -6,7 +6,7 @@
 # ============================================================
 
 import pygame
-from storage import InMemoryStore
+from storage import InMemoryStore, SQLiteStore
 from simulation import Simulation, WIDTH, HEIGHT, FPS, TIME_LIMIT
 
 # ===== CHOOSE THE STORAGE (the only line to change) =====

@@ -170,3 +170,4 @@ class Simulation:
             self.store.update_agent(z.to_dict())
         for z in new_zombies:
             z.id = self.store.add_agent(z.to_dict())
+        self.store.save()
