@@ -48,3 +48,41 @@ class StateStore(ABC):
     @abstractmethod
     def clear(self):
         """Delete everything, for starting a new game."""
+        
+
+class InMemoryStore(StateStore):
+    """Storage option 1: keeps all state in Python dictionaries (in RAM)."""
+
+    def __init__(self):
+        self.agents = {}   # agent id -> agent dictionary
+        self.values = {}   # name -> value (like "frames")
+        self.next_id = 1   # the id the next new agent will get
+
+    def add_agent(self, data):
+        agent_id = self.next_id
+        self.next_id += 1
+        data = dict(data)           # make our own copy
+        data["id"] = agent_id
+        self.agents[agent_id] = data
+        return agent_id
+
+    def update_agent(self, data):
+        self.agents[data["id"]] = dict(data)
+
+    def remove_agent(self, agent_id):
+        self.agents.pop(agent_id, None)  # None = don't crash if it's already gone
+
+    def get_agents(self, kind):
+        # Return copies of every agent whose kind matches
+        return [dict(a) for a in self.agents.values() if a["kind"] == kind]
+
+    def set_value(self, key, value):
+        self.values[key] = value
+
+    def get_value(self, key, default=None):
+        return self.values.get(key, default)
+
+    def clear(self):
+        self.agents.clear()
+        self.values.clear()
+        self.next_id = 1
